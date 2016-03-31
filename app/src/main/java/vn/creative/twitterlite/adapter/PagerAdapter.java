@@ -1,0 +1,39 @@
+package vn.creative.twitterlite.adapter;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import vn.creative.twitterlite.view.HomeTabFrg;
+import vn.creative.twitterlite.view.MentionTabFrg;
+
+/**
+ * Created by tanlnm on 3/31/2016.
+ */
+public class PagerAdapter extends FragmentStatePagerAdapter {
+    private int nTabCount;
+
+    public PagerAdapter(FragmentManager fm, int tabCount) {
+        super(fm);
+        nTabCount = tabCount;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return new HomeTabFrg();
+
+            case 1:
+                return new MentionTabFrg();
+
+            default:
+                return new HomeTabFrg();
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return nTabCount;
+    }
+}
