@@ -1,4 +1,4 @@
-package vn.creative.twitterlite.view;
+package vn.creative.twitterlite.view.home;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,11 +12,11 @@ import vn.creative.twitterlite.R;
 /**
  * Created by tanlnm on 3/31/2016.
  */
-public class MentionTabFrg extends Fragment{
+public class HomeTabFrg extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab_mention, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_home, container, false);
         return view;
     }
 }

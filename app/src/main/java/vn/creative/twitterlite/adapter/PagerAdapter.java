@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import vn.creative.twitterlite.view.HomeTabFrg;
-import vn.creative.twitterlite.view.MentionTabFrg;
+import vn.creative.twitterlite.view.home.HomeTabFrg;
+import vn.creative.twitterlite.view.mention.MentionTabFrg;
 
 /**
  * Created by tanlnm on 3/31/2016.
