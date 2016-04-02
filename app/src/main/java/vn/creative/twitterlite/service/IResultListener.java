@@ -1,12 +1,12 @@
-package vn.creative.twitterlite.view.home;
+package vn.creative.twitterlite.service;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * Created by minhtan512 on 4/2/2016.
+ * Created by TanLe on 4/2/16.
  */
-public interface IFetchTimelineListener {
+public interface IResultListener {
     void onSuccess(JSONArray response);
 
     void onFail(JSONObject error, Throwable throwable);

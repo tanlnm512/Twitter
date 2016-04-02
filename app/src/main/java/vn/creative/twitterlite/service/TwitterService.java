@@ -23,11 +23,31 @@ public class TwitterService extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
 
-    public void getHomeTimeline(long sinceId, AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(long sinceId, long maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("/statuses/home_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 20);
+//        if(maxId > 0) {
+//            params.put("max_id", maxId);
+//        } else {
+            params.put("since_id", sinceId);
+//        }
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getMention(long sinceId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("/statuses/mentions_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", 40);
         params.put("since_id", sinceId);
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getUserInfo(AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("/account/verify_credentials.json");
+        RequestParams params = new RequestParams();
+        params.put("skip_status", true);
+        params.put("include_entities", false);
         getClient().get(apiUrl, params, handler);
     }
 
@@ -44,13 +64,5 @@ public class TwitterService extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("status", tweet);
         getClient().post(apiUrl, params, handler);
-    }
-
-    public void getUserInfo(AsyncHttpResponseHandler handler){
-        String apiUrl = getApiUrl("/account/verify_credentials.json");
-        RequestParams params = new RequestParams();
-        params.put("skip_status", true);
-        params.put("include_entities", false);
-        getClient().get(apiUrl, params, handler);
     }
 }

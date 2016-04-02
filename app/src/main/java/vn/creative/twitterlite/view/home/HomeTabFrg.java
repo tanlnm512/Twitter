@@ -1,6 +1,5 @@
 package vn.creative.twitterlite.view.home;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import vn.creative.twitterlite.R;
 import vn.creative.twitterlite.adapter.TimelineAdapter;
 import vn.creative.twitterlite.common.CommonUtils;
 import vn.creative.twitterlite.common.EndlessRecyclerViewScrollListener;
@@ -32,13 +30,14 @@ import vn.creative.twitterlite.model.PostModel;
 public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActionListener {
     private static final String TAG = HomeTabFrg.class.getSimpleName();
 
-    @Bind(R.id.swipe_layout)
+    @Bind(R.id.tab_home_swipe_layout)
     SwipeRefreshLayout swipeLayout;
 
-    @Bind(R.id.rv_timeline)
+    @Bind(R.id.tab_home_rv_timeline)
     RecyclerView rvTimeline;
 
     private long nCurID = 1;
+    private long nCurMaxID = 0;
 
     private ActionBar actionBar;
     private HomeTabPresenter homeTabPresenter;
@@ -47,18 +46,18 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timeline, null);
+        View view = inflater.inflate(R.layout.fragment_tab_home, null);
         ButterKnife.bind(this, view);
         homeTabPresenter = new HomeTabPresenter(this);
 
-        setHasOptionsMenu(true);
-        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setLogo(R.mipmap.twitter_white);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setDisplayUseLogoEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
+//        setHasOptionsMenu(true);
+//        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setLogo(R.mipmap.twitter_white);
+//            actionBar.setDisplayShowHomeEnabled(true);
+//            actionBar.setDisplayUseLogoEnabled(true);
+//            actionBar.setDisplayShowTitleEnabled(false);
+//        }
 
         // Configure the refreshing colors
         swipeLayout.setColorSchemeResources(
@@ -72,7 +71,8 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
             public void onRefresh() {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
                     nCurID = 1;
-                    homeTabPresenter.fetchTimeline(nCurID);
+                    nCurMaxID = 0;
+                    homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
 
                 } else {
                     swipeLayout.setRefreshing(false);
@@ -90,7 +90,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
-                    homeTabPresenter.fetchTimeline(nCurID);
+                    homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
 
                 } else {
                     Toast.makeText(getContext(), "Network error!", Toast.LENGTH_SHORT).show();
@@ -100,7 +100,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 
         // First time load data
         if (CommonUtils.isNetworkAvailable(getContext())) {
-            homeTabPresenter.fetchTimeline(nCurID);
+            homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
 
         } else {
             List<PostModel> posts = new ArrayList<>();
@@ -128,7 +128,8 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
         }
 
         if (!posts.isEmpty()) {
-            nCurID += posts.size();
+            nCurID = posts.get(posts.size() -1).getId() + 1;
+//            nCurID = timelineAdapter.getItemCount() + 1;
         }
     }
 
@@ -156,5 +157,11 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
     @Override
     public void onLikeClick(PostModel post) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

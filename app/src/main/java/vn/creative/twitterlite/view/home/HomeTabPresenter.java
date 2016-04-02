@@ -12,11 +12,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import vn.creative.twitterlite.model.PostModel;
+import vn.creative.twitterlite.service.IResultListener;
 
 /**
  * Created by minhtan512 on 4/2/2016.
  */
-public class HomeTabPresenter implements IHomeTabPresenter, IFetchTimelineListener {
+public class HomeTabPresenter implements IHomeTabPresenter, IResultListener {
     private IHomeTabView homeTabView;
     private HomeTabInteractor homeTabInteractor;
 
@@ -26,8 +27,8 @@ public class HomeTabPresenter implements IHomeTabPresenter, IFetchTimelineListen
     }
 
     @Override
-    public void fetchTimeline(long id) {
-        homeTabInteractor.getHomeTimeline(id, this);
+    public void fetchTimeline(long sinceId, long maxId) {
+        homeTabInteractor.getHomeTimeline(sinceId, maxId, this);
     }
 
     @Override
