@@ -37,7 +37,6 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
     RecyclerView rvTimeline;
 
     private long nCurID = 1;
-    private long nCurMaxID = 0;
 
     private ActionBar actionBar;
     private HomeTabPresenter homeTabPresenter;
@@ -71,8 +70,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
             public void onRefresh() {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
                     nCurID = 1;
-                    nCurMaxID = 0;
-                    homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
+                    homeTabPresenter.fetchTimeline(nCurID);
 
                 } else {
                     swipeLayout.setRefreshing(false);
@@ -90,7 +88,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
-                    homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
+                    homeTabPresenter.fetchTimeline(nCurID);
 
                 } else {
                     Toast.makeText(getContext(), "Network error!", Toast.LENGTH_SHORT).show();
@@ -100,7 +98,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 
         // First time load data
         if (CommonUtils.isNetworkAvailable(getContext())) {
-            homeTabPresenter.fetchTimeline(nCurID, nCurMaxID);
+            homeTabPresenter.fetchTimeline(nCurID);
 
         } else {
             List<PostModel> posts = new ArrayList<>();
@@ -128,8 +126,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
         }
 
         if (!posts.isEmpty()) {
-            nCurID = posts.get(posts.size() -1).getId() + 1;
-//            nCurID = timelineAdapter.getItemCount() + 1;
+            nCurID = posts.get(posts.size() -1).getId() - 1;
         }
     }
 

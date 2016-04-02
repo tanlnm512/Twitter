@@ -27,8 +27,8 @@ public class HomeTabPresenter implements IHomeTabPresenter, IResultListener {
     }
 
     @Override
-    public void fetchTimeline(long sinceId, long maxId) {
-        homeTabInteractor.getHomeTimeline(sinceId, maxId, this);
+    public void fetchTimeline(long sinceId) {
+        homeTabInteractor.getHomeTimeline(sinceId, this);
     }
 
     @Override

@@ -15,8 +15,8 @@ import vn.creative.twitterlite.service.IResultListener;
  */
 public class HomeTabInteractor implements IHomeTabInteractor {
     @Override
-    public void getHomeTimeline(long sinceId, long maxId, final IResultListener listener) {
-        TwitterApplication.getService().getHomeTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
+    public void getHomeTimeline(long sinceId, final IResultListener listener) {
+        TwitterApplication.getService().getHomeTimeline(sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 listener.onSuccess(response);
