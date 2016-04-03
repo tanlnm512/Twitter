@@ -12,7 +12,7 @@ import vn.creative.twitterlite.R;
 /**
  * Created by minhtan512 on 3/27/2016.
  */
-public class TimelineHolder extends RecyclerView.ViewHolder {
+public class PostHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.iv_avatar) ImageView ivAvatar;
     @Bind(R.id.iv_photo) ImageView ivPhoto;
     @Bind(R.id.iv_reply) ImageView ivReply;
@@ -28,7 +28,7 @@ public class TimelineHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.tv_retweet_count) TextView tvRetweetCount;
     @Bind(R.id.tv_like_count) TextView tvLikeCount;
 
-    public TimelineHolder(View itemView) {
+    public PostHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

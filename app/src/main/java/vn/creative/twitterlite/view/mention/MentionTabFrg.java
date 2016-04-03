@@ -26,7 +26,7 @@ import vn.creative.twitterlite.model.PostModel;
 /**
  * Created by tanlnm on 3/31/2016.
  */
-public class MentionTabFrg extends Fragment implements IMentionTabView, IMentionActionListener {
+public class MentionTabFrg extends Fragment implements IMentionTabView {
     private static final String TAG = MentionTabFrg.class.getSimpleName();
 
     @Bind(R.id.tab_mention_swipe_layout)
@@ -71,7 +71,7 @@ public class MentionTabFrg extends Fragment implements IMentionTabView, IMention
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTimeline.setLayoutManager(linearLayoutManager);
-        mentionAdapter = new MentionAdapter(getContext(), this);
+        mentionAdapter = new MentionAdapter(getContext());
         rvTimeline.setAdapter(mentionAdapter);
 
         rvTimeline.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -105,23 +105,30 @@ public class MentionTabFrg extends Fragment implements IMentionTabView, IMention
     }
 
     @Override
-    public void onFetchMentionSuccess() {
+    public void onFetchMentionSuccess(List<PostModel> posts) {
+        swipeLayout.setRefreshing(false);
 
+        if (nCurID == 1) {
+            mentionAdapter.update(posts);
+
+        } else {
+            mentionAdapter.updateMore(posts);
+        }
+
+        if (!posts.isEmpty()) {
+            nCurID = posts.get(posts.size() -1).getId() - 1;
+        }
     }
 
     @Override
     public void onFetchMentionFail() {
-
+        swipeLayout.setRefreshing(false);
+        Toast.makeText(getContext(), "Get Twitter timeline fail!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-    }
-
-    @Override
-    public void onItemClick() {
-
     }
 }

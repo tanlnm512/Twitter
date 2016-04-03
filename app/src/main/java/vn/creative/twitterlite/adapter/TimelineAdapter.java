@@ -38,13 +38,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View coverView = inflater.inflate(R.layout.item_post, viewGroup, false);
-        viewHolder = new TimelineHolder(coverView);
+        viewHolder = new PostHolder(coverView);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TimelineHolder timelineHolder = (TimelineHolder) holder;
+        PostHolder postHolder = (PostHolder) holder;
 
         final PostModel post = posts.get(position);
         Picasso.with(mContext)
@@ -53,63 +53,63 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .resize(150, 150)
                 .centerCrop()
                 .tag(mContext)
-                .into(timelineHolder.ivAvatar);
-        timelineHolder.tvScreenName.setText("@" + post.getUser().getScreenName());
-        timelineHolder.tvName.setText(post.getUser().getName());
-        timelineHolder.tvTime.setText(CommonUtils.getRelativeTimeAgo(post.getCreatedAt()));
-        timelineHolder.tvRetweetCount.setText(String.valueOf(post.getRetweetCount()));
-        timelineHolder.tvLikeCount.setText(String.valueOf(post.getFavoriteCount()));
+                .into(postHolder.ivAvatar);
+        postHolder.tvScreenName.setText("@" + post.getUser().getScreenName());
+        postHolder.tvName.setText(post.getUser().getName());
+        postHolder.tvTime.setText(CommonUtils.getRelativeTimeAgo(post.getCreatedAt()));
+        postHolder.tvRetweetCount.setText(String.valueOf(post.getRetweetCount()));
+        postHolder.tvLikeCount.setText(String.valueOf(post.getFavoriteCount()));
 
         if (!TextUtils.isEmpty(post.getText())) {
-            timelineHolder.tvPost.setVisibility(View.VISIBLE);
-            timelineHolder.tvPost.setText(post.getText());
+            postHolder.tvPost.setVisibility(View.VISIBLE);
+            postHolder.tvPost.setText(post.getText());
         } else {
-            timelineHolder.tvPost.setVisibility(View.GONE);
+            postHolder.tvPost.setVisibility(View.GONE);
         }
 
         if (post.getEntities().getMedia() != null && post.getEntities().getMedia().size() > 0) {
-            timelineHolder.ivPhoto.setVisibility(View.VISIBLE);
+            postHolder.ivPhoto.setVisibility(View.VISIBLE);
             Picasso.with(mContext)
                     .load(post.getEntities().getMedia().get(0).getUrl())
-//                    .placeholder(R.mipmap.photo_placeholder)
                     .transform(new RoundedTransformation(10, 0))
+                    .placeholder(R.mipmap.photo_placeholder)
                     .tag(mContext)
-                    .noPlaceholder()
-                    .into(timelineHolder.ivPhoto);
+                    .fit()
+                    .into(postHolder.ivPhoto);
 
         } else {
-            timelineHolder.ivPhoto.setVisibility(View.GONE);
+            postHolder.ivPhoto.setVisibility(View.GONE);
         }
 
-        timelineHolder.tvPost.setOnClickListener(new View.OnClickListener() {
+        postHolder.tvPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onItemClick(post);
             }
         });
 
-        timelineHolder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+        postHolder.ivPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onItemClick(post);
             }
         });
 
-        timelineHolder.ivReply.setOnClickListener(new View.OnClickListener() {
+        postHolder.ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onReplyClick(post);
             }
         });
 
-        timelineHolder.ivRetweet.setOnClickListener(new View.OnClickListener() {
+        postHolder.ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onReplyClick(post);
             }
         });
 
-        timelineHolder.ivLike.setOnClickListener(new View.OnClickListener() {
+        postHolder.ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onReplyClick(post);

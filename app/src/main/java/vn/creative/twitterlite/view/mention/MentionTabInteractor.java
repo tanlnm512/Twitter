@@ -22,13 +22,6 @@ public class MentionTabInteractor implements IMentionTabInteractor {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 listener.onSuccess(response);
-//                try {
-//                    for (int i = 0; i < response.length(); i++) {
-//                        System.out.println(">>> " + response.getJSONObject(i).toString());
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             @Override

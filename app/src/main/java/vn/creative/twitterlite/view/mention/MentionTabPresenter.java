@@ -2,9 +2,16 @@ package vn.creative.twitterlite.view.mention;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import vn.creative.twitterlite.model.PostModel;
 import vn.creative.twitterlite.service.IResultListener;
 
 /**
@@ -26,7 +33,10 @@ public class MentionTabPresenter implements IMentionTabPresenter, IResultListene
 
     @Override
     public void onSuccess(JSONArray response) {
-        mentionTabView.onFetchMentionSuccess();
+        Type type = new TypeToken<List<PostModel>>() {
+        }.getType();
+        List<PostModel> posts = new Gson().fromJson(response.toString(), type);
+        mentionTabView.onFetchMentionSuccess(posts);
     }
 
     @Override

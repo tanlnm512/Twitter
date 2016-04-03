@@ -1,10 +1,14 @@
 package vn.creative.twitterlite.view.mention;
 
+import java.util.List;
+
+import vn.creative.twitterlite.model.PostModel;
+
 /**
  * Created by TanLe on 4/2/16.
  */
 public interface IMentionTabView {
-    void onFetchMentionSuccess();
+    void onFetchMentionSuccess(List<PostModel> posts);
 
     void onFetchMentionFail();
 }
