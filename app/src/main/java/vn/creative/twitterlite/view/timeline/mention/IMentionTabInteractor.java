@@ -1,4 +1,4 @@
-package vn.creative.twitterlite.view.mention;
+package vn.creative.twitterlite.view.timeline.mention;
 
 import vn.creative.twitterlite.service.IResultListener;
 

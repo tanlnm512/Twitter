@@ -16,7 +16,7 @@ import vn.creative.twitterlite.R;
 import vn.creative.twitterlite.common.CommonUtils;
 import vn.creative.twitterlite.common.RoundedTransformation;
 import vn.creative.twitterlite.model.PostModel;
-import vn.creative.twitterlite.view.home.ITimelineActionListener;
+import vn.creative.twitterlite.view.timeline.home.ITimelineActionListener;
 
 
 /**

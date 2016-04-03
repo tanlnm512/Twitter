@@ -1,4 +1,4 @@
-package vn.creative.twitterlite.view.home;
+package vn.creative.twitterlite.view.timeline.home;
 
 import java.util.List;
 

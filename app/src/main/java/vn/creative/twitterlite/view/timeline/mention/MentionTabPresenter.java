@@ -1,6 +1,4 @@
-package vn.creative.twitterlite.view.mention;
-
-import android.util.Log;
+package vn.creative.twitterlite.view.timeline.mention;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

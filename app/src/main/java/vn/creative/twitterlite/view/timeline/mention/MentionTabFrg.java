@@ -1,11 +1,9 @@
-package vn.creative.twitterlite.view.home;
+package vn.creative.twitterlite.view.timeline.mention;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,44 +17,36 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import vn.creative.twitterlite.R;
-import vn.creative.twitterlite.adapter.TimelineAdapter;
+import vn.creative.twitterlite.adapter.MentionAdapter;
 import vn.creative.twitterlite.common.CommonUtils;
 import vn.creative.twitterlite.common.EndlessRecyclerViewScrollListener;
+import vn.creative.twitterlite.common.VerticalSpaceItemDecoration;
 import vn.creative.twitterlite.model.PostModel;
 
 /**
- * Created by minhtan512 on 4/2/2016.
+ * Created by tanlnm on 3/31/2016.
  */
-public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActionListener {
-    private static final String TAG = HomeTabFrg.class.getSimpleName();
+public class MentionTabFrg extends Fragment implements IMentionTabView {
+    private static final String TAG = MentionTabFrg.class.getSimpleName();
 
-    @Bind(R.id.tab_home_swipe_layout)
+    @Bind(R.id.tab_mention_swipe_layout)
     SwipeRefreshLayout swipeLayout;
 
-    @Bind(R.id.tab_home_rv_timeline)
-    RecyclerView rvTimeline;
+    @Bind(R.id.tab_mention_rv_mention)
+    RecyclerView rvMention;
 
     private long nCurID = 1;
 
-    private ActionBar actionBar;
-    private HomeTabPresenter homeTabPresenter;
-    private TimelineAdapter timelineAdapter;
+    private MentionTabPresenter mentionTabPresenter;
+    private MentionAdapter mentionAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tab_home, null);
+        View view = inflater.inflate(R.layout.fragment_tab_mention, container, false);
         ButterKnife.bind(this, view);
-        homeTabPresenter = new HomeTabPresenter(this);
 
-//        setHasOptionsMenu(true);
-//        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setLogo(R.mipmap.twitter_white);
-//            actionBar.setDisplayShowHomeEnabled(true);
-//            actionBar.setDisplayUseLogoEnabled(true);
-//            actionBar.setDisplayShowTitleEnabled(false);
-//        }
+        mentionTabPresenter = new MentionTabPresenter(this);
 
         // Configure the refreshing colors
         swipeLayout.setColorSchemeResources(
@@ -70,7 +60,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
             public void onRefresh() {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
                     nCurID = 1;
-                    homeTabPresenter.fetchTimeline(nCurID);
+                    mentionTabPresenter.fetchMention(nCurID);
 
                 } else {
                     swipeLayout.setRefreshing(false);
@@ -80,15 +70,17 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvTimeline.setLayoutManager(linearLayoutManager);
-        timelineAdapter = new TimelineAdapter(getContext(), this);
-        rvTimeline.setAdapter(timelineAdapter);
+//        rvMention.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.recyclerview_divider));
+        rvMention.addItemDecoration(new VerticalSpaceItemDecoration(20));
+        rvMention.setLayoutManager(linearLayoutManager);
+        mentionAdapter = new MentionAdapter(getContext());
+        rvMention.setAdapter(mentionAdapter);
 
-        rvTimeline.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        rvMention.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 if (CommonUtils.isNetworkAvailable(getContext())) {
-                    homeTabPresenter.fetchTimeline(nCurID);
+                    mentionTabPresenter.fetchMention(nCurID);
 
                 } else {
                     Toast.makeText(getContext(), "Network error!", Toast.LENGTH_SHORT).show();
@@ -98,7 +90,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 
         // First time load data
         if (CommonUtils.isNetworkAvailable(getContext())) {
-            homeTabPresenter.fetchTimeline(nCurID);
+            mentionTabPresenter.fetchMention(nCurID);
 
         } else {
             List<PostModel> posts = new ArrayList<>();
@@ -108,52 +100,32 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 //                    posts.add(post);
 //                }
 //            }
-            onFetchTimelineSuccess(posts);
+//            onFetchMentionSuccess(posts);
         }
 
         return view;
     }
 
     @Override
-    public void onFetchTimelineSuccess(List<PostModel> posts) {
+    public void onFetchMentionSuccess(List<PostModel> posts) {
         swipeLayout.setRefreshing(false);
 
         if (nCurID == 1) {
-            timelineAdapter.update(posts);
+            mentionAdapter.update(posts);
 
         } else {
-            timelineAdapter.updateMore(posts);
+            mentionAdapter.updateMore(posts);
         }
 
         if (!posts.isEmpty()) {
-            nCurID = posts.get(posts.size() -1).getId() - 1;
+            nCurID = posts.get(posts.size() - 1).getId() - 1;
         }
     }
 
     @Override
-    public void onFetchTimelineFail() {
+    public void onFetchMentionFail() {
         swipeLayout.setRefreshing(false);
         Toast.makeText(getContext(), "Get Twitter timeline fail!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onItemClick(PostModel post) {
-
-    }
-
-    @Override
-    public void onReplyClick(PostModel post) {
-
-    }
-
-    @Override
-    public void onRetweetClick(PostModel post) {
-
-    }
-
-    @Override
-    public void onLikeClick(PostModel post) {
-
     }
 
     @Override

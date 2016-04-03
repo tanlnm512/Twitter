@@ -1,22 +1,23 @@
-package vn.creative.twitterlite.view.home;
+package vn.creative.twitterlite.view.timeline.mention;
+
+import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import vn.creative.twitterlite.TwitterApplication;
 import vn.creative.twitterlite.service.IResultListener;
 
 /**
- * Created by minhtan512 on 4/2/2016.
+ * Created by TanLe on 4/2/16.
  */
-public class HomeTabInteractor implements IHomeTabInteractor {
+public class MentionTabInteractor implements IMentionTabInteractor {
     @Override
-    public void getHomeTimeline(long sinceId, final IResultListener listener) {
-        TwitterApplication.getService().getHomeTimeline(sinceId, new JsonHttpResponseHandler() {
+    public void getMention(long id, final IResultListener listener) {
+        TwitterApplication.getService().getMention(id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 listener.onSuccess(response);
@@ -25,6 +26,7 @@ public class HomeTabInteractor implements IHomeTabInteractor {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 listener.onFail(errorResponse, throwable);
+                Log.e("DEBUG", "fetch mention fail!", throwable);
             }
         });
     }
