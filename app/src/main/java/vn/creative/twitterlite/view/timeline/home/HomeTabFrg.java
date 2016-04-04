@@ -1,12 +1,9 @@
 package vn.creative.twitterlite.view.timeline.home;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +24,7 @@ import vn.creative.twitterlite.common.EndlessRecyclerViewScrollListener;
 import vn.creative.twitterlite.common.VerticalSpaceItemDecoration;
 import vn.creative.twitterlite.model.PostModel;
 import vn.creative.twitterlite.view.profile.UserProfileFrg;
+import vn.creative.twitterlite.view.tweet.TweetDlg;
 
 /**
  * Created by minhtan512 on 4/2/2016.
@@ -44,7 +38,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
     @Bind(R.id.tab_home_rv_timeline)
     RecyclerView rvTimeline;
 
-    private long nCurID = 1;
+    private long nCurID;
 
     private HomeTabPresenter homeTabPresenter;
     private TimelineAdapter timelineAdapter;
@@ -98,6 +92,7 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
         });
 
         // First time load data
+        nCurID = 1;
         if (CommonUtils.isNetworkAvailable(getContext())) {
             homeTabPresenter.fetchTimeline(nCurID);
 
@@ -152,7 +147,10 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 
     @Override
     public void onReplyClick(PostModel post) {
-
+        TweetDlg dlg = new TweetDlg();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("post", post);
+        dlg.show(getFragmentManager(), "TweetDlg");
     }
 
     @Override

@@ -26,7 +26,7 @@ public class TwitterService extends OAuthBaseClient {
     public void getHomeTimeline(long id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count", 20);
+        params.put("count", 40);
 
         if (id == 1) {
             params.put("since_id", id);
@@ -40,7 +40,22 @@ public class TwitterService extends OAuthBaseClient {
     public void getUserTimeline(long id, long userId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count", 20);
+        params.put("count", 40);
+        params.put("user_id", userId);
+
+        if (id == 1) {
+            params.put("since_id", id);
+        } else {
+            params.put("max_id", id);
+        }
+
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getFavorite(long id, long userId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("favorites/list.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 40);
         params.put("user_id", userId);
 
         if (id == 1) {

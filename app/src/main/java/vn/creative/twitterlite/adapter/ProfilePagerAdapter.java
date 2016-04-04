@@ -17,12 +17,13 @@ import vn.creative.twitterlite.view.profile.tweets.TweetsTabFrg;
 public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
     private int nTabCount;
     private List<PostModel> mPosts;
+    private long nId;
 
-    public ProfilePagerAdapter(FragmentManager fm, int tabCount, List<PostModel> posts) {
+    public ProfilePagerAdapter(FragmentManager fm, int tabCount, List<PostModel> posts, long id) {
         super(fm);
         nTabCount = tabCount;
-        nId = id;
         mPosts = posts;
+        nId = id;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
                 return PhotosTabFrg.newInstance(mPosts);
 
             case 2:
-                return FavoritesTabFrg.newInstance(mPosts);
+                return FavoritesTabFrg.newInstance(nId);
 
             default:
                 return TweetsTabFrg.newInstance(mPosts);

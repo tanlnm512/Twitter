@@ -206,7 +206,7 @@ public class UserProfileFrg extends Fragment {
         TwitterApplication.getService().getUserInfo(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                UserModel user = new Gson().fromJson(response.toString(), UserModel.class);
+                final UserModel user = new Gson().fromJson(response.toString(), UserModel.class);
                 if(user != null) {
                     TwitterApplication.getService().getUserTimeline(nCurId, user.getId(), new JsonHttpResponseHandler(){
                         @Override
@@ -214,7 +214,7 @@ public class UserProfileFrg extends Fragment {
                             Type type = new TypeToken<List<PostModel>>() {
                             }.getType();
                             List<PostModel> posts = new Gson().fromJson(response.toString(), type);
-                            adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts);
+                            adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts, user.getId());
                             viewPager.setAdapter(adapter);
                         }
                     });
@@ -223,7 +223,7 @@ public class UserProfileFrg extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e("DEBUG", "get user info fail!", throwable);
+                Log.e("DEBUG", "load timeline fail!", throwable);
             }
         });
     }
@@ -235,8 +235,13 @@ public class UserProfileFrg extends Fragment {
                 Type type = new TypeToken<List<PostModel>>() {
                 }.getType();
                 List<PostModel> posts = new Gson().fromJson(response.toString(), type);
-                adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts);
+                adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts, nUserId);
                 viewPager.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.e("DEBUG", "load timeline fail!", throwable);
             }
         });
     }
