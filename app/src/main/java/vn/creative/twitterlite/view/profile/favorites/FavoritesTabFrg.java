@@ -7,19 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import vn.creative.twitterlite.R;
+import vn.creative.twitterlite.model.PostModel;
 
 /**
  * Created by tanlnm on 4/4/2016.
  */
 public class FavoritesTabFrg extends Fragment {
-    public static FavoritesTabFrg newInstance(long id) {
-        FavoritesTabFrg fragment = new FavoritesTabFrg();
-        Bundle args = new Bundle();
-        args.putLong("id", id);
-        fragment.setArguments(args);
+    private static List<PostModel> mPosts;
 
-        return fragment;
+    public static FavoritesTabFrg newInstance(List<PostModel> posts) {
+        mPosts = posts;
+        return  new FavoritesTabFrg();
     }
 
     @Nullable

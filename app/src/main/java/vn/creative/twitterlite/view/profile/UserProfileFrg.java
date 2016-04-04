@@ -16,11 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +33,7 @@ import vn.creative.twitterlite.R;
 import vn.creative.twitterlite.TwitterApplication;
 import vn.creative.twitterlite.adapter.ProfilePagerAdapter;
 import vn.creative.twitterlite.common.RoundedTransformation;
+import vn.creative.twitterlite.model.PostModel;
 import vn.creative.twitterlite.model.UserModel;
 
 /**
@@ -64,7 +70,8 @@ public class UserProfileFrg extends Fragment {
     @Bind(R.id.profile_tv_screen_name)
     TextView tvScreenName;
 
-    private long nId = -1;
+    private long nUserId = -1;
+    private long nCurId = 1;
 
     private ProfilePagerAdapter adapter;
 
@@ -81,7 +88,7 @@ public class UserProfileFrg extends Fragment {
 
         ButterKnife.bind(this, view);
         if (getArguments() != null) {
-            nId = getArguments().getLong("id");
+            nUserId = getArguments().getLong("id");
         }
 
         tabLayout.addTab(tabLayout.newTab().setText("Tweets"));
@@ -89,8 +96,6 @@ public class UserProfileFrg extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Favorites"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), nId);
-        viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -109,11 +114,13 @@ public class UserProfileFrg extends Fragment {
             }
         });
 
-        if (nId == -1) {
+        if (nUserId == -1) {
             loadProfile();
+            loadTimeline();
 
         } else {
             loadUserProfile();
+            loadUserTimeline();
         }
 
         return view;
@@ -123,6 +130,31 @@ public class UserProfileFrg extends Fragment {
         TwitterApplication.getService().getUserInfo(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                UserModel user = new Gson().fromJson(response.toString(), UserModel.class);
+                if (user != null) {
+                    Picasso.with(getContext())
+                            .load(user.getAvatar())
+                            .transform(new RoundedTransformation(5, 0))
+                            .resize(100, 100)
+                            .placeholder(R.drawable.avatar_placeholder)
+                            .tag(getContext())
+                            .centerCrop()
+                            .into(ivProfileAvatar);
+
+                    Picasso.with(getContext())
+                            .load(user.getProfileBannerUrl())
+                            .placeholder(R.drawable.photo_placeholder)
+                            .tag(getContext())
+                            .fit()
+                            .into(ivProfileBanner);
+
+                    btnFollow.setVisibility(View.GONE);
+                    tvFollowing.setText(user.getFriendsCount() + " FOLLOWING");
+                    tvFollower.setText(user.getFollowersCount() + " FOLLOWER");
+                    tvName.setText(user.getName());
+                    tvScreenName.setText("@" + user.getScreenName());
+                    tvIntro.setText(user.getDescription());
+                }
             }
 
             @Override
@@ -133,7 +165,7 @@ public class UserProfileFrg extends Fragment {
     }
 
     private void loadUserProfile() {
-        TwitterApplication.getService().getUserInfo(nId, new JsonHttpResponseHandler() {
+        TwitterApplication.getService().getUserInfo(nUserId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 UserModel user = new Gson().fromJson(response.toString(), UserModel.class);
@@ -166,6 +198,45 @@ public class UserProfileFrg extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e("DEBUG", "Load profile fail!", throwable);
+            }
+        });
+    }
+
+    private void loadTimeline() {
+        TwitterApplication.getService().getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                UserModel user = new Gson().fromJson(response.toString(), UserModel.class);
+                if(user != null) {
+                    TwitterApplication.getService().getUserTimeline(nCurId, user.getId(), new JsonHttpResponseHandler(){
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            Type type = new TypeToken<List<PostModel>>() {
+                            }.getType();
+                            List<PostModel> posts = new Gson().fromJson(response.toString(), type);
+                            adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts);
+                            viewPager.setAdapter(adapter);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.e("DEBUG", "get user info fail!", throwable);
+            }
+        });
+    }
+
+    private void loadUserTimeline() {
+        TwitterApplication.getService().getUserTimeline(nCurId, nUserId, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Type type = new TypeToken<List<PostModel>>() {
+                }.getType();
+                List<PostModel> posts = new Gson().fromJson(response.toString(), type);
+                adapter = new ProfilePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), posts);
+                viewPager.setAdapter(adapter);
             }
         });
     }

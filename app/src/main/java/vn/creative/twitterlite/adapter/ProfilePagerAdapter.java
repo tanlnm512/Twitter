@@ -4,6 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.util.List;
+
+import vn.creative.twitterlite.model.PostModel;
 import vn.creative.twitterlite.view.profile.favorites.FavoritesTabFrg;
 import vn.creative.twitterlite.view.profile.photos.PhotosTabFrg;
 import vn.creative.twitterlite.view.profile.tweets.TweetsTabFrg;
@@ -13,28 +16,29 @@ import vn.creative.twitterlite.view.profile.tweets.TweetsTabFrg;
  */
 public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
     private int nTabCount;
-    private long nId;
+    private List<PostModel> mPosts;
 
-    public ProfilePagerAdapter(FragmentManager fm, int tabCount, long id) {
+    public ProfilePagerAdapter(FragmentManager fm, int tabCount, List<PostModel> posts) {
         super(fm);
         nTabCount = tabCount;
         nId = id;
+        mPosts = posts;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return TweetsTabFrg.newInstance(nId);
+                return TweetsTabFrg.newInstance(mPosts);
 
             case 1:
-                return PhotosTabFrg.newInstance(nId);
+                return PhotosTabFrg.newInstance(mPosts);
 
             case 2:
-                return FavoritesTabFrg.newInstance(nId);
+                return FavoritesTabFrg.newInstance(mPosts);
 
             default:
-                return TweetsTabFrg.newInstance(nId);
+                return TweetsTabFrg.newInstance(mPosts);
         }
     }
 

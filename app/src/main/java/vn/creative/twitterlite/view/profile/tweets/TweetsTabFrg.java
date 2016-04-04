@@ -3,23 +3,25 @@ package vn.creative.twitterlite.view.profile.tweets;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import vn.creative.twitterlite.R;
+import vn.creative.twitterlite.model.PostModel;
 
 /**
  * Created by tanlnm on 4/4/2016.
  */
 public class TweetsTabFrg extends Fragment {
-    public static TweetsTabFrg newInstance(long id) {
-        TweetsTabFrg fragment = new TweetsTabFrg();
-        Bundle args = new Bundle();
-        args.putLong("id", id);
-        fragment.setArguments(args);
+    private static List<PostModel> mPosts;
 
-        return fragment;
+    public static TweetsTabFrg newInstance(List<PostModel> posts) {
+        mPosts = posts;
+        return new TweetsTabFrg();
     }
 
     @Nullable
