@@ -68,7 +68,7 @@ public class MentionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Picasso.with(mContext)
                     .load(post.getEntities().getMedia().get(0).getUrl())
                     .transform(new RoundedTransformation(10, 0))
-                    .placeholder(R.mipmap.photo_placeholder)
+                    .placeholder(R.drawable.photo_placeholder)
                     .tag(mContext)
                     .fit()
                     .into(postHolder.ivPhoto);

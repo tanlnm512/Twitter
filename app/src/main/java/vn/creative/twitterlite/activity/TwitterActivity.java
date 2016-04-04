@@ -19,10 +19,9 @@ public class TwitterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_twitter);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = new TimelineFrg();
-        fragmentTransaction.add(R.id.fragment_container, fragment, "TimelineFrg").commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new TimelineFrg(), "TimelineFrg")
+                .commit();
     }
 
     @Override

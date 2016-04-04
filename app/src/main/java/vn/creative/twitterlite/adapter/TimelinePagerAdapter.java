@@ -10,10 +10,10 @@ import vn.creative.twitterlite.view.timeline.mention.MentionTabFrg;
 /**
  * Created by tanlnm on 3/31/2016.
  */
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class TimelinePagerAdapter extends FragmentStatePagerAdapter {
     private int nTabCount;
 
-    public PagerAdapter(FragmentManager fm, int tabCount) {
+    public TimelinePagerAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         nTabCount = tabCount;
     }

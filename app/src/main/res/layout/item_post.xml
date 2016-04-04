@@ -18,7 +18,7 @@
             android:id="@+id/iv_avatar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@mipmap/avatar_placeholder" />
+            android:src="@drawable/avatar_placeholder" />
     </RelativeLayout>
 
     <LinearLayout
@@ -95,13 +95,13 @@
                     android:id="@+id/iv_reply"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/reply" />
+                    android:src="@drawable/reply" />
 
                 <ImageView
                     android:id="@+id/iv_reply_on"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/reply_on"
+                    android:src="@drawable/reply_on"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -116,13 +116,13 @@
                     android:id="@+id/iv_retweet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/retweet" />
+                    android:src="@drawable/retweet" />
 
                 <ImageView
                     android:id="@+id/iv_retweet_on"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/retweet_on"
+                    android:src="@drawable/retweet_on"
                     android:visibility="gone" />
 
                 <TextView
@@ -145,13 +145,13 @@
                     android:id="@+id/iv_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/like" />
+                    android:src="@drawable/like" />
 
                 <ImageView
                     android:id="@+id/iv_like_on"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/like_on"
+                    android:src="@drawable/like_on"
                     android:visibility="gone" />
 
                 <TextView

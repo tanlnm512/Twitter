@@ -17,35 +17,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import vn.creative.twitterlite.R;
-import vn.creative.twitterlite.adapter.PagerAdapter;
+import vn.creative.twitterlite.adapter.TimelinePagerAdapter;
+import vn.creative.twitterlite.view.profile.UserProfileFrg;
 import vn.creative.twitterlite.view.tweet.TweetDlg;
 
 /**
  * Created by minhtan512 on 4/3/2016.
  */
 public class TimelineFrg extends Fragment {
+    @Bind(R.id.tab_layout)
+    TabLayout tabLayout;
+
+    @Bind(R.id.pager)
+    ViewPager viewPager;
+
+    private TimelinePagerAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         setHasOptionsMenu(true);
+        ButterKnife.bind(this, view);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setIcon(R.mipmap.twitter_white);
+            actionBar.setIcon(R.drawable.twitter_white);
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.show();
         }
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Home"));
         tabLayout.addTab(tabLayout.newTab().setText("Mention"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        adapter = new TimelinePagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -102,6 +113,9 @@ public class TimelineFrg extends Fragment {
                 break;
 
             case R.id.menu_profile:
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserProfileFrg())
+                        .addToBackStack("UserProfileFrg").commit();
                 Toast.makeText(getContext(), "Profile!", Toast.LENGTH_SHORT).show();
                 break;
 

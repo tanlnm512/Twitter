@@ -10,7 +10,7 @@
         android:id="@+id/iv_logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@mipmap/twitter_white" />
+        android:src="@drawable/twitter_white" />
 
     <Button
         android:id="@+id/btn_login_twitter"

@@ -1,5 +1,6 @@
 package vn.creative.twitterlite.view.timeline.home;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -139,10 +140,14 @@ public class HomeTabFrg extends Fragment implements IHomeTabView, ITimelineActio
 
     @Override
     public void onItemClick(PostModel post) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment = new UserProfileFrg();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "UserProfileFrg").addToBackStack("UserProfileFrg").commit();
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", post.getUser().getId());
+        fragment.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, "UserProfileFrg")
+                .addToBackStack("UserProfileFrg").commit();
     }
 
     @Override

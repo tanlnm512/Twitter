@@ -7,22 +7,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="125dp">
+        android:layout_height="175dp">
 
         <ImageView
-            android:id="@+id/profile_iv_cover"
+            android:id="@+id/profile_iv_banner"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:scaleType="center"
-            android:src="@mipmap/photo_placeholder" />
+            android:src="@drawable/photo_placeholder" />
 
         <ImageView
             android:id="@+id/profile_iv_avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="20dp"
-            android:src="@mipmap/avatar_placeholder" />
+            android:src="@drawable/avatar_placeholder" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -51,9 +51,11 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/profile_btn_follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:textColor="@color/twitter_1"
             android:background="@drawable/follow_border"
             android:text="follow" />
     </RelativeLayout>
@@ -69,6 +71,7 @@
             android:id="@+id/profile_tv_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/twitter_3"
             android:text="introduce" />
     </RelativeLayout>
 
