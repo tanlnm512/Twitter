@@ -14,7 +14,7 @@
 
     <Button
         android:id="@+id/btn_login_twitter"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/login_selector"
         android:gravity="center"
